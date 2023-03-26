@@ -1,3 +1,10 @@
+<style>
+:root {
+    background-color: #181a1b;
+    color: aliceblue;
+}
+</style>
+
 <template>
     <div id="app">
         <StatusView :status="status" :loadHistory="loadHistory" :incidents="incidents"/>
@@ -27,7 +34,7 @@ export default {
     mounted: async function () {
         var self = this;
         async function update() {
-            var response = await fetch('https://gamemakerserver.com/dynamic/status.php');
+            var response = await fetch('https://teduapp.tedu.edu.tr/status/data2.json');
             var json = await response.json();
 
             self.loadHistory = json.loadHistory;

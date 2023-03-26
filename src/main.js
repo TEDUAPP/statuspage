@@ -2,8 +2,12 @@ import Vue from 'vue'
 import App from './App.vue'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+var utc = require('dayjs/plugin/utc')
+var timezone = require('dayjs/plugin/timezone')
 
 dayjs.extend(relativeTime)
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 Vue.config.productionTip = false
 
@@ -16,7 +20,8 @@ Vue.filter("twoDigits", function (value) {
 });
 
 Vue.filter("relativeTime", function (date) {
-    return dayjs(date).fromNow();
+    var timez = dayjs.tz.guess();
+    return dayjs(date).tz(timez).fromNow();
 });
 
 new Vue({

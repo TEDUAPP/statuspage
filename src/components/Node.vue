@@ -1,10 +1,10 @@
 <style scoped>
     .box {
-        border: 1px solid #888;
-        box-shadow: 0px 0px 16px #ddd;
-        background: #fafafa;
+        border: 1px solid rgb(82, 88, 92);
+        box-shadow: rgb(43, 47, 49) 0px 0px 16px;
+        background: rgb(27, 29, 30);
         position: relative;
-        color: #000000;
+        color: rgb(232, 230, 227);
     }
 
     .node {
@@ -15,14 +15,21 @@
         flex-direction: column;
         justify-content: stretch;
     }
-
+    .box.error, .error .box {
+        background: #d7b000;
+        color: #ffffff;
+        border-color: #9e6c00;
+    }
     .box.danger, .danger .box {
         background: #d73000;
         color: #ffffff;
         border-color: #9e2000;
     }
-
     .danger td {
+        color: #ffffff;
+    }
+
+    .error td {
         color: #ffffff;
     }
 
@@ -37,20 +44,25 @@
     .node .header {
         display: grid;
         grid-template-columns: [first] 20% auto [last] 20%;
-        background: #F1FA8C;
-        color: #000000;
+        color: rgb(232, 230, 227);
+        background-color: rgb(83, 88, 4);
     }
 
     .node.default .header {
-        background: #1F85DE;
-        color: #ffffff;
+        background: rgb(25, 106, 178);
+        color: rgb(232, 230, 227);
+    }
+
+    .node.error .header {
+        background: rgb(172, 141, 0);
+        color: rgb(232, 230, 227);
     }
 
     .node.danger .header {
-        background: #d73000;
-        color: #ffffff;
+        background: rgb(172, 38, 0);
+        color: rgb(232, 230, 227);
     }
-
+    
     .node .header .title {
         text-align: center;
     }
@@ -84,10 +96,13 @@
         background: rgba(0, 0, 0, 0.2);
         padding: 4px;
     }
-
+    .value-table .error, .value-table .error a {
+        background: rgb(172, 141, 0);
+        color: rgb(232, 230, 227);
+    }
     .value-table .danger, .value-table .danger a {
-        background: #ff0000;
-        color: #ffffff;
+        background: rgb(172, 38, 0);
+        color: rgb(232, 230, 227);
     }
 
     .expandable {
@@ -185,7 +200,8 @@
    <div :class="[
        'node', 'box',
         { 
-           'danger': status.highLoad,
+           'danger': status.error,
+           'error': status.highLoad,
            'default': status.isDefault,
         }
     ]">
@@ -198,79 +214,35 @@
                         <Indicator item-name="RAM" :good="isProxy ? 300 : 200" :bad="isProxy ? 600 : 400" :value="status.ram">{{ status.ram }}MiB</Indicator>
                         <Indicator v-if="!isProxy" item-name="Min. ping" good="50" bad="150" :value="status.minPing">{{ status.minPing }}ms</Indicator>
                         <Indicator v-if="!isProxy" item-name="Avg. ping" good="200" bad="500" :value="status.avgPing">{{ status.avgPing }}ms</Indicator>
-                        <Indicator v-if="!isProxy" item-name="Avg. loop" good="5" bad="10" :value="status.avgTick + status.avgReceive">{{  status.avgTick + status.avgReceive | twoDigits }}ms</Indicator>
-                        <Indicator item-name="Error rate" good="3" bad="6" :value="status.errorRate">{{ status.errorRate | twoDigits }}</Indicator>
+                        <Indicator v-if="!isProxy" item-name="Avg. loop" good="5" bad="10" :value="status.loop">{{ status.loop | twoDigits }}ms</Indicator>
+                        <Indicator item-name="Error rate" good=".2" bad=".75" :value="status.errorRate">{{ status.errorRate | twoDigits }}</Indicator>
                     </table>
                 </div>
             </div>
             <h3 class="title" v-if="!isProxy">
-                Instance #{{ status.nodeId }}
+                Cluster #{{ status.nodeId }}
                 <span class="expandable left" v-if="status.isDefault">
                 *
                 <div class="box expanded tooltip">
                     <p>
-                        This is the default node for new connections. If a game does not have sessions running on other nodes, a new session will be started here.
+                        This is the default node for new connections. Most likely, new incoming connections will handled on this cluster.
                     </p>
                 </div>
                 </span>
             </h3>
-            <h3 class="title" v-if="isProxy">Proxy</h3>
-            <div class="expandable" v-if="!isProxy">
-                {{ status.games.map(x => x.connected).reduce((a, b) => a + b, 0) }}
-                <div class="expanded box">
-                    <table class="value-table">
-                        <tr>
-                            <td class="count">{{ status.games.map(x => x.connected).reduce((a, b) => a + b, 0) }}</td>
-                            <td>connected</td>
-                        </tr>
-                        <tr>
-                            <td class="count">{{ status.games.map(x => x.loggedIn).reduce((a, b) => a + b, 0) }}</td>
-                            <td>logged in</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+            <h3 class="title" v-if="isProxy">Load Balancer</h3>
         </div>
         <div v-if="isProxy">
             <p>
-                The proxy node is the entry point for all connections to the server. Here, incoming are inspected and sent on to the right instance. Outgoing messages are sent back to the correct connection.
+                The loadbalancer is the entry point for all connections to the app server. Here, all incoming connections are inspected and sent on to the right cluster. Outgoing messages are sent back to the correct destination.
             </p>
         </div>
-        <table class="value-table" v-if="!isProxy">
-            <tr :class="{ 
-                danger: game.highLoad,
-            }" v-for="(game, index) in status.games" :key="index">
-                <td class="count expandable left">
-                    {{ game.connected }}
-                    <div class="expanded box">
-                        <table class="value-table">
-                            <tr>
-                                <td class="count">{{ game.connected }}</td>
-                                <td>connected</td>
-                            </tr>
-                            <tr>
-                                <td class="count">{{ game.loggedIn }}</td>
-                                <td>logged in</td>
-                            </tr>
-                        </table>
-                    </div>
-                </td>
-                <td>
-                    <a :href="`https://gamemakerserver.com/en/games/${game.id}/`" v-if="game.id != 0">
-                        {{ game.title }}
-                    </a>
-                    <span v-if="game.id == 0" class="other">
-                        {{ game.title}}
-                    </span>
-                </td>
-            </tr>
-        </table>
         <div class="overlay seethrough" v-if="status.locked">
             <svg class="scale-5x" xmlns="http://www.w3.org/2000/svg" width="20" height="20">
                 <path d="m3,9v11h14V9M4,9V6c0-3.3 2.7-6 6-6c3.3,0 6,2.7 6,6v3H14V6c0-2.2-1.8-4-4-4-2.2,0-4,1.8-4,4v3"/>
             </svg>
             <div class="overlay sideways full">
-                FULL
+                Disabled
             </div>
         </div>
     </div>

@@ -24,7 +24,7 @@
 
     small {
         padding: 0;
-        color: #666;
+        color: rgb(168, 160, 149);
     }
 
     b.tag {
@@ -38,28 +38,29 @@
     }
 
     b.entry-Notice {
-        background: #AAAAAA;
+        background: rgb(72, 78, 81);
+        border-color: rgb(140, 130, 115);
     }
 
     b.entry-Proactive, b.entry-Update {
-        background: #a7e56f;
-        border-color: #5aab11;
+        background: rgb(88, 130, 23);
+        border-color: rgb(95, 181, 18);
     }
 
     b.entry-Minor {
-        background: #efdb6d;
-        border-color: #d9ba17;
+        background: rgb(100, 86, 11);
+        border-color: rgb(165, 142, 18);
     }
 
     b.entry-Major {
-        background: #ffa950;
-        border-color: #d97917;
+        background: rgb(156, 79, 0);
+        border-color: rgb(165, 92, 18);
     }
 
     b.entry-Critical {
-        background: #ff0000;
-        color: #FFFFFF;
-        border-color: #880000;
+        background: rgb(204, 0, 0);
+        color: rgb(232, 230, 227);
+        border-color: rgb(214, 0, 0);
     }
 
     div {
@@ -71,7 +72,7 @@
     }
 
     .human-needed {
-        background: #ffc1b3;
+        background: rgb(97, 18, 0);
     }
 </style>
 
@@ -81,8 +82,10 @@
             'closed': data.closed != null
         }">
         <h3>{{ data.title }}</h3>
-        <!-- <small>Started {{ data.started | relativeTime }}</small> -->
-
+        <small>Started {{ data.started | relativeTime }}</small>
+        <div v-if="data.closed != null">
+            <small>Resolved {{ data.closed | relativeTime }}</small>
+        </div>
         <ul>
             <li :class="{
                 'human-needed': log.humanNeeded,    

@@ -1,8 +1,8 @@
 <template>
     <svg width="100%" height="200" viewBox="0 0 1000 100" preserveAspectRatio="none">
         <polyline
-        fill="#CBDDE6"
-        stroke="#97BBCD"
+        fill="#203642"
+        stroke="#94b9cb"
         stoke-width="2"
         :points="pointsStr"
         />

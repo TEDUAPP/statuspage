@@ -3,13 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "servewin": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
+    "buildwin": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
+    "serve": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service serve",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "core-js": "^3.6.4",
-    "dayjs": "^1.8.25",
+    "dayjs": "^1.11.7",
     "vue": "^2.6.11"
   },
   "devDependencies": {
