@@ -13,7 +13,8 @@ This is the source code of [status.gamemakerserver.com](https://status.gamemaker
 * Credit added for AGPLv3 license
 * Internet block enabled
 * A test data has been added called "test.json" to show the example of the back-end data
-* Avg. Loop (RTT) directly calculated by the back-end so a"vgTick" and "avgLoop" was changed by "loop".
+* Min Ping removed
+* Avg. Loop (RTT) directly calculated by the back-end so a"vgTick" and "avgLoop" was changed by "loop"
 
 # License
 All code in this repository is licensed under the AGPLv3.
