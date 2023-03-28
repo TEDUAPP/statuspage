@@ -10,7 +10,8 @@ This is the source code of [status.gamemakerserver.com](https://status.gamemaker
 * Games list removed
 * Proxy node is now called loadbalancer and nodes are called clusters
 * "Full" text changed with "Disabled"
-* Credit added for AGPLv3 license
+* Chart divided into two and both shows CPU and RAM usage
+* Credit and source added for AGPLv3 license
 * Internet block enabled
 * A test data has been added called "test.json" to show the example of the back-end data
 * Min Ping removed

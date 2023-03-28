@@ -7,7 +7,7 @@
 
 <template>
     <div id="app">
-        <StatusView :status="status" :loadHistory="loadHistory" :incidents="incidents"/>
+        <StatusView :status="status" :cpuHistory="cpuHistory" :ramHistory="ramHistory" :incidents="incidents"/>
     </div>
 </template>
 
@@ -21,9 +21,13 @@ export default {
     },
     data: () => {
         return {
-            loadHistory: [
-                1, 4, 66, 77,
+            cpuHistory: [
+                54, 40, 66, 77,
                 54, 67, 13
+            ],
+            ramHistory: [
+                44, 46, 55, 58,
+                54, 49, 50
             ],
             status: {
                 proxy: {},
@@ -37,7 +41,8 @@ export default {
             var response = await fetch('https://teduapp.tedu.edu.tr/status/data2.json');
             var json = await response.json();
 
-            self.loadHistory = json.loadHistory;
+            self.cpuHistory = json.cpuHistory;
+            self.ramHistory = json.ramHistory;
             self.incidents = json.incidents;
             self.status = {
                 proxy: json.status.filter(x => x.isProxy)[0],

@@ -4,9 +4,27 @@
         margin: auto;
     }
 
-    .nodelist, .incidents, .chart {
+    .nodelist, .incidents {
         padding: 0 2em;
         margin-bottom: 4em;
+    }
+
+    .chart {
+        padding: 0 2em;
+        margin-bottom: 0em;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .charttext {
+        padding: 0 2em;
+        margin-bottom: -2em;
+        width: 100%;
+        display: flex;
+        font-size: 1em;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
     }
 
     .instances {
@@ -58,9 +76,15 @@
         <h1>TEDUApp Cluster System Status</h1><br>
         <small>Based on <a href="https://status.gamemakerserver.com/">the status page of GameMakerServer</a> | <a href="https://github.com/TEDUAPP/statuspage">Source Code</a></small>
         <div class="chart">
-            <Chart :points="loadHistory" />
+            <Chart :points="cpuHistory" />
+            <div style="width: 5em"></div>
+            <Chart :points="ramHistory" />
         </div>
-
+        <div class="charttext">
+            <h2 style="width: 160px; align-items: center;">CPU Usage</h2>
+            <div style="width: 5em"></div>
+            <h2 style="width: 160px; align-items: center;">RAM Usage</h2>
+        </div>
         <h1>Detailed view</h1>
         <div class="nodelist">
             <div class="internet">
@@ -103,7 +127,8 @@ export default {
     },
     props: {
         status: Object,
-        loadHistory: Array,
+        cpuHistory: Array,
+        ramHistory: Array,
         incidents: Array,
     }
 }
