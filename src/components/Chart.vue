@@ -21,7 +21,13 @@ export default {
 
             console.log(this.points, this.points.length, 0 < this.points.length);
             
-            var max = Math.max.apply(null, this.points) * 1.1;
+            var max = 0;
+            var pointMax = Math.max.apply(null, this.points);
+            if (pointMax == 0){
+                max = 1;
+            } else {
+                max = pointMax * 1.1;
+            }
             for(var i = 0; i < this.points.length; i++)
             {
                 s += " " + Math.round((i * 1000 / (this.points.length - 1))) + "," + (100 - (this.points[i] * 100 / max));
